@@ -1,11 +1,11 @@
 const { db } = require('./config')
-const { User, Deck, Card, Attack } = require('../models')
+const { User } = require('../models')
 
-function randInt(a, b) {
+function randInt (a, b) {
   return a + Math.floor(Math.random() * (b - a))
 }
 
-async function seed() {
+async function seed () {
   await db.sync({ force: true })
 
   const users = await User.bulkCreate([
@@ -53,7 +53,7 @@ async function seed() {
   ]
 
   const cardPromises = []
-  for (let deck of decks) {
+  for (const deck of decks) {
     const cardCount = randInt(2, 5)
     for (let i = 0; i < cardCount; i++) {
       const j = randInt(0, cards.length)
