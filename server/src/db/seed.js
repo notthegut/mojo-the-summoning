@@ -1,5 +1,5 @@
 const { db } = require('./config')
-const { User } = require('../models')
+const { User, Attack } = require('../models')
 
 function randInt (a, b) {
   return a + Math.floor(Math.random() * (b - a))
@@ -16,7 +16,7 @@ async function seed () {
 
   const deckNames = ['snake pit', 'the matrix', 'Doom Burger']
   const decks = await Promise.all(
-    users.map((u, i) => u.createDeck({ name: deckNames[i] }))
+    users.map((u, i) => u.createDeck({ name: deckNames[i], xp: randInt(0, 100)  }))
   )
 
   const cards = [
@@ -60,7 +60,33 @@ async function seed () {
       cardPromises.push(deck.createCard(cards[j]))
     }
   }
-  await Promise.all(cardPromises)
+  
+  const createdCards = await Promise.all(cardPromises)
+
+  // Seed Attacks
+  const attacks = await Attack.bulkCreate([
+    { title: "Charge", mojoCost: 10, staminaCost: 15 },
+    { title: "Thunderbolt", mojoCost: 20, staminaCost: 10 },
+    { title: "Piledriver", mojoCost: 25, staminaCost: 20 },
+    { title: "Fireball", mojoCost: 30, staminaCost: 25 },
+    { title: "Ice Spear", mojoCost: 15, staminaCost: 20 },
+    { title: "Heal", mojoCost: 10, staminaCost: 5 },
+    { title: "Poison Strike", mojoCost: 35, staminaCost: 30 },
+    { title: "Shadow Cloak", mojoCost: 40, staminaCost: 10 },
+    { title: "Earthquake", mojoCost: 50, staminaCost: 35 },
+    { title: "Wind Slash", mojoCost: 25, staminaCost: 15 },
+  ]);
+
+  // Create associations between cards and attacks
+  const cardAttackPromises = [];
+  for (const card of createdCards) {
+    const attackCount = randInt(2, 4); // Assign 2-4 random attacks to each card
+    for (let i = 0; i < attackCount; i++) {
+      const j = randInt(0, attacks.length);
+      cardAttackPromises.push(card.addAttack(attacks[j]));
+    }
+  }
+  await Promise.all(cardAttackPromises);
 
   console.log('Database seeded')
 }
