@@ -12,7 +12,7 @@ beforeAll(async () => {
 })
 
 // clear db after tests
-afterAll(async () => await db.sync({ force: true }))
+afterAll(async () => await db.close())
 
 describe('User', () => {
   it('has an id', async () => {
