@@ -1,6 +1,6 @@
 const {db,DataTypes} = require('../db/config.js')
 
-const Deck = db.define('deck', {
+const Deck = db.define('Deck', {
     name: {
         type: DataTypes.STRING,
     },

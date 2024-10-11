@@ -1,6 +1,6 @@
 const {db, DataTypes} = require ('../db/config.js')
 
-const Attack = db.define('attack', {
+const Attack = db.define('Attack', {
     title: {
         type: DataTypes.STRING
     },

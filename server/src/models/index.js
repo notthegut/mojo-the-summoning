@@ -2,6 +2,7 @@ const { User } = require('./User');
 const { Deck } = require('./Deck');
 const { Card } = require('./Card');
 const { Attack } = require('./Attack');
+const { HasMany } = require('sequelize')
 
 // Set up associations
 Deck.belongsTo(User);
